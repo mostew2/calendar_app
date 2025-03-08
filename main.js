@@ -1,6 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
-const db = require('./database');
+const { initializeDatabase, insertUser, getAllUsers } = require('./database');
 
 console.log("Starting main process..."); // Add this log
 
@@ -21,43 +21,18 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
-  console.log("App is ready..."); // Add this log
-  db.get('SELECT COUNT(*) AS count FROM users', (err, row) => {
-    if (row.count === 0) {
-      db.run('INSERT INTO users (name) VALUES (?)', ['Alice']);
-      db.run('INSERT INTO users (name) VALUES (?)', ['Bob']);
-    }
-  });
-
-  ipcMain.handle('fetch-users', async () => {
-    console.log('Fetching users from database...');
-    return new Promise((resolve, reject) => {
-      db.all('SELECT * FROM users', (err, rows) => {
-        if (err) {
-          reject(err);
-        } else {
-          console.log('Fetched users:', rows);
-          resolve(rows);
-        }
-      });
+  initializeDatabase().then(() => {
+    ipcMain.handle('fetch-users', async () => {
+      const allUsers = getAllUsers();
+      return allUsers;
     });
-  });
-
-  ipcMain.handle('add-user', async (event, name) => {
-    console.log('Adding user:', name);
-    return new Promise((resolve, reject) => {
-      db.run('INSERT INTO users (name) VALUES (?)', [name], function(err) {
-        if (err) {
-          reject(err);
-        } else {
-          console.log('User added:', { id: this.lastID, name });
-          resolve({ id: this.lastID, name });
-        }
-      });
+  
+    ipcMain.handle('add-user', async (event, name) => {
+      insertUser(name);
     });
-  });
-
-  createWindow();
+  
+    createWindow();
+  })
 });
 
 app.on('window-all-closed', () => {

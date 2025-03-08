@@ -1,16 +1,16 @@
 {
-  "name": "mollys-electron-app",
-  "version": "0.1.0",
+  "name": "mollys-electron-app-3",
+  "version": "0.3.0",
   "private": true,
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
     "@testing-library/user-event": "^13.5.0",
+    "lokijs": "^1.5.12",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-scripts": "5.0.1",
-    "sqlite3": "^5.1.7",
     "web-vitals": "^2.1.4"
   },
   "main": "main.js",
@@ -48,7 +48,7 @@
     "electron-builder": "^25.1.8"
   },
   "build": {
-    "appId": "myapp.molly",
+    "appId": "myapp.molly3",
     "files": [
       "build/**/*",
       "main.js",
