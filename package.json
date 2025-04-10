@@ -23,7 +23,8 @@
     "electron": "electron .",
     "postinstall": "electron-builder install-app-deps",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder"
+    "dist": "electron-builder",
+    "dist:all": "electron-builder --win --x64 --arm64 --ia32"
   },
   "eslintConfig": {
     "extends": [
@@ -59,10 +60,9 @@
       "target": "dmg"
     },
     "win": {
-      "target": [
-        "nsis"
-      ]
+      "target": "nsis"
     },
+    "artifactName": "${productName} Setup ${version}-${arch}.${ext}",
     "buildDependenciesFromSource": true,
     "extends": null
   }
